@@ -79,28 +79,36 @@ public class DataTuple {
 
 		if (game.getGhostLairTime(GHOST.BLINKY) == 0) {
 			this.isBlinkyEdible = game.isGhostEdible(GHOST.BLINKY);
-			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.BLINKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.INKY) == 0) {
 			this.isInkyEdible = game.isGhostEdible(GHOST.INKY);
-			this.inkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY));
+			this.inkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.INKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.PINKY) == 0) {
 			this.isPinkyEdible = game.isGhostEdible(GHOST.PINKY);
-			this.pinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY));
+			this.pinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.SUE) == 0) {
 			this.isSueEdible = game.isGhostEdible(GHOST.SUE);
-			this.sueDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE));
+			this.sueDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.SUE));
 		}
 
-		this.blinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.PATH);
-		this.inkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.PATH);
-		this.pinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.PATH);
-		this.sueDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.PATH);
+		this.blinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.PATH);
+		this.inkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.INKY), DM.PATH);
+		this.pinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.PATH);
+		this.sueDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.SUE), DM.PATH);
 
 		this.numberOfNodesInLevel = game.getNumberOfNodes();
 		this.numberOfTotalPillsInLevel = game.getNumberOfPills();
@@ -171,12 +179,11 @@ public class DataTuple {
 	}
 
 	/**
-	 * Used to normalize distances. Done via min-max normalization. Supposes
-	 * that minimum possible distance is 0. Supposes that the maximum possible
-	 * distance is 150.
+	 * Used to normalize distances. Done via min-max normalization. Supposes that
+	 * minimum possible distance is 0. Supposes that the maximum possible distance
+	 * is 150.
 	 * 
-	 * @param dist
-	 *            Distance to be normalized
+	 * @param dist Distance to be normalized
 	 * @return Normalized distance
 	 */
 	public double normalizeDistance(int dist) {
@@ -209,6 +216,13 @@ public class DataTuple {
 		} else {
 			return 0.0;
 		}
+	}
+
+	public String discreteBoolean(boolean bool) {
+		if (bool)
+			return "YES";
+		else
+			return "NO";
 	}
 
 	public double normalizeNumberOfPills(int numOfPills) {
@@ -249,8 +263,8 @@ public class DataTuple {
 
 	/**
 	 * 
-	 * Max score value lifted from highest ranking PacMan controller on PacMan
-	 * vs Ghosts website: http://pacman-vs-ghosts.net/controllers/1104
+	 * Max score value lifted from highest ranking PacMan controller on PacMan vs
+	 * Ghosts website: http://pacman-vs-ghosts.net/controllers/1104
 	 * 
 	 * @param score
 	 * @return
@@ -264,4 +278,47 @@ public class DataTuple {
 		return DiscreteTag.DiscretizeDouble(aux);
 	}
 
+	public String GetAttributeValue(String attribute) {
+
+		switch (attribute) {
+		case "isBlinkyEdible":
+			return discreteBoolean(this.isBlinkyEdible);
+
+		case "isInkyEdible":
+			return discreteBoolean(this.isInkyEdible);
+
+		case "isPinkyEdible":
+			return discreteBoolean(this.isPinkyEdible);
+
+		case "isSueEdible":
+			return discreteBoolean(this.isSueEdible);
+
+		case "blinkyDist":
+			return discretizeDistance(this.blinkyDist).toString();
+
+		case "inkyDist":
+			return discretizeDistance(this.inkyDist).toString();
+
+		case "pinkyDist":
+			return discretizeDistance(this.pinkyDist).toString();
+
+		case "sueDist":
+			return discretizeDistance(this.sueDist).toString();
+
+		case "blinkyDir":
+			return this.blinkyDir.toString();
+
+		case "inkyDir":
+			return this.inkyDir.toString();
+
+		case "pinkyDir":
+			return this.pinkyDir.toString();
+
+		case "sueDir":
+			return this.sueDir.toString();
+
+		default:
+			return "";
+		}
+	}
 }
