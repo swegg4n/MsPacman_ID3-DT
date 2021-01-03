@@ -58,7 +58,7 @@ public class MyPacMan extends Controller<MOVE> {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 		rootNode.Print("");
 	}
 
@@ -120,8 +120,7 @@ public class MyPacMan extends Controller<MOVE> {
 
 			if (d_j.isEmpty()) {
 				N.childNodes.put(a_j, new Node(MajorityMove(data).toString()));
-			}
-			else {
+			} else {
 				N.childNodes.put(a_j, CreateDT(d_j, attributes_clone));
 			}
 		}
@@ -166,10 +165,11 @@ public class MyPacMan extends Controller<MOVE> {
 	private String AttributeSelection(List<DataTuple> data, List<String> attributeKeys) {
 
 		String selectedAttribute = "";
-		double bestAD = Double.MAX_VALUE;
+		double bestIG = Double.MAX_VALUE;
 
 		for (int i = 0; i < attributeKeys.size(); i++) {
-			double AD = 0;
+
+			double IG = 0;
 			List<String> currentAttributeValues = attributes.get(attributeKeys.get(i));
 			int[] nbrOfEachValue = new int[currentAttributeValues.size()];
 
@@ -202,20 +202,21 @@ public class MyPacMan extends Controller<MOVE> {
 						break;
 					}
 				}
-
-				double T = nbrOfEachValue[j];
-				if (T != 0) {
-					AD += (T / data.size()) * (-((up / T) * log2(up / T)) - ((down / T) * log2(down / T))
-							- ((left / T) * log2(left / T)) - ((right / T) * log2(right / T))
-							- ((neutral / T) * log2(neutral / T)));
+				double S_v = nbrOfEachValue[j];
+				if (S_v != 0) {
+					IG += (S_v / data.size()) * (-((up / S_v) * log2(up / S_v)) - ((down / S_v) * log2(down / S_v))
+							- ((left / S_v) * log2(left / S_v)) - ((right / S_v) * log2(right / S_v))
+							- ((neutral / S_v) * log2(neutral / S_v)));
 				}
+				IG *= -1;
 			}
 
-			if (AD < bestAD) {
-				bestAD = AD;
+			if (IG < bestIG) {
+				bestIG = IG;
 				selectedAttribute = attributeKeys.get(i);
 			}
 		}
+		
 		return selectedAttribute;
 	}
 
@@ -224,45 +225,47 @@ public class MyPacMan extends Controller<MOVE> {
 			return 0;
 		return (Math.log(N) / Math.log(2));
 	}
-	
-	
-	public void ValidateTraining()
-	{
+
+	public void ValidateTraining() {
 		if (testData.size() <= 0)
 			throw new RuntimeException("Unable to validate training - no test data found");
-		
+
 		MOVE testMove;
 		MOVE trainedMove;
 		int correctMoves = 0;
-		
-		for(int i = 0; i<testData.size(); i++) {
+
+		for (int i = 0; i < testData.size(); i++) {
 			testMove = testData.get(i).DirectionChosen;
-			trainedMove = getMove(this.rootNode,testData.get(i));
-			
+			trainedMove = getMove(this.rootNode, testData.get(i));
+
 			if (testMove == trainedMove)
 				correctMoves++;
 		}
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
 		System.out.println(correctMoves + " correct moves (out of " + testData.size() + " moves)");
-		System.out.println("Accuracy: " + (double)correctMoves / testData.size());
+		System.out.println("Accuracy: " + (double) correctMoves / testData.size());
 	}
-	
-	
-	
+
 	public MOVE getMove(Game game, long timeDue) {
 
 		DataTuple data = new DataTuple(game, null);
 		return getMove(this.rootNode, data);
 	}
+
+	
+	boolean printMoves = false;
 	
 	public MOVE getMove(Node node, DataTuple data) {
 		MOVE move = MOVE.NEUTRAL;
-		
-		if (node.IsLeaf()) {			
+
+		if (node.IsLeaf()) {
 			move = MOVE.valueOf(node.label);
-		}
-		else {
-			Node nextNode = (Node)node.childNodes.get(data.GetAttributeValue(node.label));
+			
+			if (printMoves)
+				System.out.println("Selected move: " + move + ",  Data: " + data.ToString(new ArrayList<String>(attributes.keySet())));
+			
+		} else {
+			Node nextNode = (Node) node.childNodes.get(data.GetAttributeValue(node.label));
 			move = getMove(nextNode, data);
 		}
 		return move;

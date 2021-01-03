@@ -1,5 +1,9 @@
 package dataRecording;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
@@ -320,5 +324,14 @@ public class DataTuple {
 		default:
 			return "";
 		}
+	}
+	
+	public String ToString(ArrayList<String> attributes) {
+	
+		String returnString = "";
+		for	(int i = 0; i<attributes.size(); i++){
+			returnString += attributes.get(i) + ": " + GetAttributeValue(attributes.get(i)) + ", ";
+		}
+		return returnString;
 	}
 }
