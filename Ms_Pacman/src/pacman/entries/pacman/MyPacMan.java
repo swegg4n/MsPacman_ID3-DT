@@ -33,23 +33,19 @@ public class MyPacMan extends Controller<MOVE> {
 	public MyPacMan() {
 		CreateTrainingTestData();
 
-		List<String> yesNo_attributes = Arrays.asList(new String[] { "YES", "NO" });
+		//List<String> yesNo_attributes = Arrays.asList(new String[] { "YES", "NO" });
 		List<String> dist_attributes = Arrays
 				.asList(new String[] { "VERY_LOW", "LOW", "MEDIUM", "HIGH", "VERY_HIGH", "NONE" });
 		List<String> dir_attributes = Arrays.asList(new String[] { "UP", "DOWN", "LEFT", "RIGHT" });
 
-		attributes.put("isBlinkyEdible", yesNo_attributes);
-		attributes.put("isInkyEdible", yesNo_attributes);
-		attributes.put("isPinkyEdible", yesNo_attributes);
-		attributes.put("isSueEdible", yesNo_attributes);
-		attributes.put("blinkyDist", dist_attributes);
-		attributes.put("inkyDist", dist_attributes);
-		attributes.put("pinkyDist", dist_attributes);
-		attributes.put("sueDist", dist_attributes);
 		attributes.put("blinkyDir", dir_attributes);
 		attributes.put("inkyDir", dir_attributes);
 		attributes.put("pinkyDir", dir_attributes);
 		attributes.put("sueDir", dir_attributes);
+		attributes.put("blinkyEdibleDist", dist_attributes);
+		attributes.put("inkyEdibleDist", dist_attributes);
+		attributes.put("pinkyEdibleDist", dist_attributes);
+		attributes.put("sueEdibleDist", dist_attributes);
 		attributes.put("nearestPillDir", dir_attributes);
 	}
 
@@ -254,7 +250,7 @@ public class MyPacMan extends Controller<MOVE> {
 	boolean printMoves = false;
 	
 	public MOVE getMove(Node node, DataTuple data) {
-		MOVE move = MOVE.NEUTRAL;
+		MOVE move;
 
 		if (node.IsLeaf()) {
 			move = MOVE.valueOf(node.label);

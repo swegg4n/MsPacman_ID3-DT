@@ -53,17 +53,23 @@ public class DataTuple {
 	public int pinkyDist = -1;
 	public int sueDist = -1;
 
-	public MOVE blinkyDir;
-	public MOVE inkyDir;
-	public MOVE pinkyDir;
-	public MOVE sueDir;
-
+	
 	// Util data - useful for normalization
 	public int numberOfNodesInLevel;
 	public int numberOfTotalPillsInLevel;
 	public int numberOfTotalPowerPillsInLevel;
 	private int maximumDistance = 150;
 
+	
+	
+	public MOVE blinkyDir;
+	public MOVE inkyDir;
+	public MOVE pinkyDir;
+	public MOVE sueDir;
+	public int blinkyEdibleDist = -1;
+	public int inkyEdibleDist = -1;
+	public int pinkyEdibleDist = -1;
+	public int sueEdibleDist = -1;
 	public MOVE nearestPillDir;
 	
 
@@ -74,6 +80,7 @@ public class DataTuple {
 
 		this.DirectionChosen = move;
 
+		/*
 		this.mazeIndex = game.getMazeIndex();
 		this.currentLevel = game.getCurrentLevel();
 		this.pacmanPosition = game.getPacmanCurrentNodeIndex();
@@ -83,7 +90,7 @@ public class DataTuple {
 		this.currentLevelTime = game.getCurrentLevelTime();
 		this.numOfPillsLeft = game.getNumberOfActivePills();
 		this.numOfPowerPillsLeft = game.getNumberOfActivePowerPills();
-
+*/
 		if (game.getGhostLairTime(GHOST.BLINKY) == 0) {
 			this.isBlinkyEdible = game.isGhostEdible(GHOST.BLINKY);
 			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
@@ -116,11 +123,18 @@ public class DataTuple {
 				game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.PATH);
 		this.sueDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
 				game.getGhostCurrentNodeIndex(GHOST.SUE), DM.PATH);
-
+		
+		
+		this.blinkyEdibleDist = this.isBlinkyEdible ? 0 : this.blinkyDist;
+		this.inkyEdibleDist = this.isInkyEdible ? 0 : this.inkyDist;
+		this.pinkyEdibleDist = this.isPinkyEdible ? 0 : this.pinkyDist;
+		this.sueEdibleDist = this.isSueEdible ? 0 : this.sueDist;
+		
+/*
 		this.numberOfNodesInLevel = game.getNumberOfNodes();
 		this.numberOfTotalPillsInLevel = game.getNumberOfPills();
 		this.numberOfTotalPowerPillsInLevel = game.getNumberOfPowerPills();
-
+*/
 		int[] activePills = game.getActivePillsIndices();
 		int[] activePowerPills = game.getActivePowerPillsIndices();
 
@@ -142,6 +156,7 @@ public class DataTuple {
 
 		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
 
+		/*
 		this.mazeIndex = Integer.parseInt(dataSplit[1]);
 		this.currentLevel = Integer.parseInt(dataSplit[2]);
 		this.pacmanPosition = Integer.parseInt(dataSplit[3]);
@@ -166,12 +181,23 @@ public class DataTuple {
 		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
 		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
 		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
-		this.nearestPillDir = MOVE.valueOf(dataSplit[25]);
+		*/
+		
+		this.blinkyDir = MOVE.valueOf(dataSplit[1]);
+		this.inkyDir = MOVE.valueOf(dataSplit[2]);
+		this.pinkyDir = MOVE.valueOf(dataSplit[3]);
+		this.sueDir = MOVE.valueOf(dataSplit[4]);	
+		this.blinkyEdibleDist = Integer.parseInt(dataSplit[5]);
+		this.inkyEdibleDist = Integer.parseInt(dataSplit[6]);
+		this.pinkyEdibleDist = Integer.parseInt(dataSplit[7]);
+		this.sueEdibleDist = Integer.parseInt(dataSplit[8]);
+		this.nearestPillDir = MOVE.valueOf(dataSplit[9]);
 	}
 
 	public String getSaveString() {
 		StringBuilder stringbuilder = new StringBuilder();
 
+		/*
 		stringbuilder.append(this.DirectionChosen + ";");
 		stringbuilder.append(this.mazeIndex + ";");
 		stringbuilder.append(this.currentLevel + ";");
@@ -197,6 +223,19 @@ public class DataTuple {
 		stringbuilder.append(this.numberOfNodesInLevel + ";");
 		stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
 		stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
+		stringbuilder.append(this.nearestPillDir);
+		*/
+		
+		stringbuilder.append(this.DirectionChosen + ";");
+		
+		stringbuilder.append(this.blinkyDir + ";");
+		stringbuilder.append(this.inkyDir + ";");
+		stringbuilder.append(this.pinkyDir + ";");
+		stringbuilder.append(this.sueDir + ";");
+		stringbuilder.append(this.blinkyEdibleDist + ";");
+		stringbuilder.append(this.inkyEdibleDist + ";");
+		stringbuilder.append(this.pinkyEdibleDist + ";");
+		stringbuilder.append(this.sueEdibleDist + ";");
 		stringbuilder.append(this.nearestPillDir);
 		
 		return stringbuilder.toString();
@@ -305,6 +344,7 @@ public class DataTuple {
 	public String GetAttributeValue(String attribute) {
 
 		switch (attribute) {
+		/*
 		case "isBlinkyEdible":
 			return discreteBoolean(this.isBlinkyEdible);
 
@@ -328,7 +368,19 @@ public class DataTuple {
 
 		case "sueDist":
 			return discretizeDistance(this.sueDist).toString();
+*/
+		case "blinkyEdibleDist":
+			return discretizeDistance(this.blinkyEdibleDist).toString();
 
+		case "inkyEdibleDist":
+			return discretizeDistance(this.inkyEdibleDist).toString();
+
+		case "pinkyEdibleDist":
+			return discretizeDistance(this.pinkyEdibleDist).toString();
+
+		case "sueEdibleDist":
+			return discretizeDistance(this.sueEdibleDist).toString();
+			
 		case "blinkyDir":
 			return this.blinkyDir.toString();
 
