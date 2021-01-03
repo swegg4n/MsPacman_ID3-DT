@@ -64,6 +64,9 @@ public class DataTuple {
 	public int numberOfTotalPowerPillsInLevel;
 	private int maximumDistance = 150;
 
+	public MOVE nearestPillDir;
+	
+
 	public DataTuple(Game game, MOVE move) {
 		if (move == MOVE.NEUTRAL) {
 			move = game.getPacmanLastMoveMade();
@@ -117,6 +120,21 @@ public class DataTuple {
 		this.numberOfNodesInLevel = game.getNumberOfNodes();
 		this.numberOfTotalPillsInLevel = game.getNumberOfPills();
 		this.numberOfTotalPowerPillsInLevel = game.getNumberOfPowerPills();
+
+		int[] activePills = game.getActivePillsIndices();
+		int[] activePowerPills = game.getActivePowerPillsIndices();
+
+		int[] targetNodeIndices = new int[activePills.length + activePowerPills.length];
+
+		for (int i = 0; i < activePills.length; i++)
+			targetNodeIndices[i] = activePills[i];
+		for (int i = 0; i < activePowerPills.length; i++)
+			targetNodeIndices[activePills.length + i] = activePowerPills[i];
+
+		this.nearestPillDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), targetNodeIndices, DM.PATH),
+				DM.PATH);
+
 	}
 
 	public DataTuple(String data) {
@@ -148,6 +166,7 @@ public class DataTuple {
 		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
 		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
 		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
+		this.nearestPillDir = MOVE.valueOf(dataSplit[25]);
 	}
 
 	public String getSaveString() {
@@ -178,7 +197,8 @@ public class DataTuple {
 		stringbuilder.append(this.numberOfNodesInLevel + ";");
 		stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
 		stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
-
+		stringbuilder.append(this.nearestPillDir);
+		
 		return stringbuilder.toString();
 	}
 
@@ -321,15 +341,18 @@ public class DataTuple {
 		case "sueDir":
 			return this.sueDir.toString();
 
+		case "nearestPillDir":
+			return this.nearestPillDir.toString();
+			
 		default:
 			return "";
 		}
 	}
-	
+
 	public String ToString(ArrayList<String> attributes) {
-	
+
 		String returnString = "";
-		for	(int i = 0; i<attributes.size(); i++){
+		for (int i = 0; i < attributes.size(); i++) {
 			returnString += attributes.get(i) + ": " + GetAttributeValue(attributes.get(i)) + ", ";
 		}
 		return returnString;

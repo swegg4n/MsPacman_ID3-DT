@@ -50,6 +50,7 @@ public class MyPacMan extends Controller<MOVE> {
 		attributes.put("inkyDir", dir_attributes);
 		attributes.put("pinkyDir", dir_attributes);
 		attributes.put("sueDir", dir_attributes);
+		attributes.put("nearestPillDir", dir_attributes);
 	}
 
 	public void Print() {
