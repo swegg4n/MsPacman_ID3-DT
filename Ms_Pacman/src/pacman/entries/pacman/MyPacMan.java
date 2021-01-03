@@ -88,9 +88,6 @@ public class MyPacMan extends Controller<MOVE> {
 	public void GenerateDT() {
 		ArrayList<String> attributeKeys = new ArrayList<String>(attributes.keySet());
 		rootNode = CreateDT(trainingData, attributeKeys);
-
-		// rootNode.Print();
-		// validate training
 	}
 
 	private Node CreateDT(List<DataTuple> data, ArrayList<String> attributeKeys) {
